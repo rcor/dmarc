@@ -1,14 +1,30 @@
 version: "3.9"
 services:
-  app:
-    build: ./job/
   db:
     image: postgres:15.1
     restart: always
     environment:
       POSTGRES_PASSWORD: rodolfo
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+  init-db:
+    build: ./migration/
+    depends_on:
+      db: 
+        condition: service_started
+    environment:
+      - USER=postgres
+      - PASSWORD=rodolfo
+      - DATABASE=postgres
+      - HOST=db
+    links:
+    - db:db
   adminer:
     image: adminer
     restart: always
     ports:
       - 8081:8081
+    expose:
+      - 8081
