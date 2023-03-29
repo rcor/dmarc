@@ -1,5 +1,14 @@
 version: "3.9"
 services:
+  job: 
+    build: ./job/
+    environment:
+      - USER=postgres
+      - PASSWORD=rodolfo
+      - DATABASE=postgres
+      - HOST=db
+    links:
+    - db:db  
   db:
     image: postgres:15.1
     restart: always
